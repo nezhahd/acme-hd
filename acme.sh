@@ -83,6 +83,11 @@ Aemail=$auto@gmail.com
 fi
 yellow "当前注册的邮箱名称：$Aemail"
 green "开始安装acme.sh申请证书脚本"
+wget -N https://github.com/Neilpang/acme.sh/archive/master.tar.gz >/dev/null 2>&1
+tar -zxvf master.tar.gz >/dev/null 2>&1
+cd acme.sh-master >/dev/null 2>&1
+./acme.sh --install >/dev/null 2>&1
+cd
 curl https://get.acme.sh | sh -s email=$Aemail
 [[ -n $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && green "安装acme.sh证书申请程序成功" || red "安装acme.sh证书申请程序失败" 
 bash /root/.acme.sh/acme.sh --upgrade --use-wget --auto-upgrade
