@@ -102,17 +102,17 @@ echo
 yellow "建议二：更换下当前本地网络IP环境，再尝试执行脚本"
 rm -rf acme.sh && exit
 }
-if [[ -f /root/cert.crt && -f /root/private.key ]] && [[ -s /root/cert.crt && -s /root/private.key ]]; then
-if [[ -f '/etc/hysteria/config.json' ]]; then
-echo ${ym} > /etc/hysteria/ca.log
+if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
+if [[ -f '/etc/hysteria/config.json' ]] || [[ -f '/etc/caddy/Caddyfile' ]]; then
+echo ${ym} > /root/ygkkkca/ca.log
 fi
 sed -i '/--cron/d' /etc/crontab
 echo "0 0 * * * root bash /root/.acme.sh/acme.sh --cron -f >/dev/null 2>&1" >> /etc/crontab
-green "root目录下的域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root 文件夹" 
+green "root目录下的域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root/ygkkkca文件夹" 
 yellow "公钥文件crt路径如下，可直接复制"
-green "/root/cert.crt"
+green "/root/ygkkkca/cert.crt"
 yellow "密钥文件key路径如下，可直接复制"
-green "/root/private.key"
+green "/root/ygkkkca/private.key"
 rm -rf acme.sh
 else
 fail
@@ -120,7 +120,7 @@ fi
 }
 
 installCA(){
-bash ~/.acme.sh/acme.sh --install-cert -d ${ym} --key-file /root/private.key --fullchain-file /root/cert.crt --ecc
+bash ~/.acme.sh/acme.sh --install-cert -d ${ym} --key-file /root/ygkkkca/private.key --fullchain-file /root/ygkkkca/cert.crt --ecc
 }
 
 ACMEstandaloneDNS(){
@@ -216,10 +216,11 @@ fi
 
 acme(){
 yellow "稍等3秒，检测IP环境中"
+mkdir /root/ygkkkca
 wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
-ab="1.选择standalone独立模式申请证书（仅需域名），安装过程中将强制释放80端口，相关http应用端口可能都将失效，请自行处理。\n2.选择DNS API模式申请证书（需域名、ID、Key），目前支持Cloudflare域名解析平台、腾讯域名解析平台、阿里域名解析平台\n0.返回上一层\n 请选择："
+ab="1.选择独立模式申请证书（仅需域名，小白推荐），安装过程中将强制释放80端口\n2.选择DNS API模式申请证书（需域名、ID、Key），自动识别单域名与泛域名\n0.返回上一层\n 请选择："
 readp "$ab" cd
 case "$cd" in 
 1 ) acme1 && acme2 && acme3 && ACMEstandaloneDNS;;
@@ -251,7 +252,7 @@ readp "请输入要撤销并删除的域名证书（复制Main_Domain下显示�
 if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
 bash /root/.acme.sh/acme.sh --revoke -d ${ym} --ecc
 bash /root/.acme.sh/acme.sh --remove -d ${ym} --ecc
-rm -rf cert.crt private.key
+rm -rf /root/ygkkkca/cert.crt /root/ygkkkca/private.key
 green "撤销并删除${ym}域名证书成功"
 else
 red "未找到你输入的${ym}域名证书，请自行核实！" && exit
@@ -285,7 +286,7 @@ uninstall(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
 curl https://get.acme.sh | sh
 bash /root/.acme.sh/acme.sh --uninstall
-rm -rf cert.crt private.key
+rm -rf /root/ygkkkca
 rm -rf ~/.acme.sh acme.sh
 sed -i '/--cron/d' /etc/crontab
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && green "acme.sh卸载完毕" || red "acme.sh卸载失败"
