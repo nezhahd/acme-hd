@@ -252,7 +252,7 @@ readp "请输入要撤销并删除的域名证书（复制Main_Domain下显示�
 if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
 bash /root/.acme.sh/acme.sh --revoke -d ${ym} --ecc
 bash /root/.acme.sh/acme.sh --remove -d ${ym} --ecc
-rm -rf /root/ygkkkca/cert.crt /root/ygkkkca/private.key
+rm -rf /root/ygkkkca
 green "撤销并删除${ym}域名证书成功"
 else
 red "未找到你输入的${ym}域名证书，请自行核实！" && exit
