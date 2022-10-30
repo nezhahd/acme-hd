@@ -104,7 +104,7 @@ rm -rf acme.sh && exit
 }
 if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
 if [[ -f '/etc/hysteria/config.json' ]] || [[ -f '/etc/caddy/Caddyfile' ]]; then
-echo ${ym} > /root/ygkkkca/ca.log
+echo $ym > /root/ygkkkca/ca.log
 fi
 sed -i '/--cron/d' /etc/crontab
 echo "0 0 * * * root bash /root/.acme.sh/acme.sh --cron -f >/dev/null 2>&1" >> /etc/crontab
