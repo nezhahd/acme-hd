@@ -216,7 +216,7 @@ fi
 
 acme(){
 yellow "稍等3秒，检测IP环境中"
-mkdir /root/ygkkkca
+mkdir -p /root/ygkkkca
 wgcfv6=$(curl -s6m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 wgcfv4=$(curl -s4m6 https://www.cloudflare.com/cdn-cgi/trace -k | grep warp | cut -d= -f2)
 if [[ ! $wgcfv4 =~ on|plus && ! $wgcfv6 =~ on|plus ]]; then
