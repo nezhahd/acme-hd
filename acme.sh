@@ -153,7 +153,7 @@ fi
 domainIP=$(curl -s ipget.net/?ip=$ym)
 if [[ -n $(echo $domainIP | grep nginx) && -n $(echo $ym | grep \*) ]]; then
 green "经检测，当前为泛域名证书申请，" && sleep 2
-abc=a$(echo $ym | tr -d '*')
+abc=ygkkk.acme$(echo $ym | tr -d '*')
 domainIP=$(curl -s ipget.net/?ip=$abc)
 else
 green "经检测，当前为单域名证书申请，" && sleep 2
