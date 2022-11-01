@@ -105,7 +105,7 @@ rm -rf acme.sh && exit
 if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
 sed -i '/--cron/d' /etc/crontab
 echo "0 0 * * * root bash /root/.acme.sh/acme.sh --cron -f >/dev/null 2>&1" >> /etc/crontab
-green "root目录下的域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root/ygkkkca文件夹内" 
+green "域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root/ygkkkca文件夹内" 
 yellow "公钥文件crt路径如下，可直接复制"
 green "/root/ygkkkca/cert.crt"
 yellow "密钥文件key路径如下，可直接复制"
