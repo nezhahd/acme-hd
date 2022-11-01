@@ -2,6 +2,7 @@
 red='\033[0;31m'
 bblue='\033[0;34m'
 plain='\033[0m'
+blue(){ echo -e "\033[36m\033[01m$1\033[0m";}
 red(){ echo -e "\033[31m\033[01m$1\033[0m";}
 green(){ echo -e "\033[32m\033[01m$1\033[0m";}
 yellow(){ echo -e "\033[33m\033[01m$1\033[0m";}
@@ -30,7 +31,6 @@ v4v6(){
 v6=$(curl -s6m5 https://ip.gs -k)
 v4=$(curl -s4m5 https://ip.gs -k)
 }
-
 
 acme1(){
 [[ $(type -P yum) ]] && yumapt='yum -y' || yumapt='apt -y'
@@ -103,17 +103,20 @@ yellow "建议二：更换下当前本地网络IP环境，再尝试执行脚本"
 rm -rf acme.sh && exit
 }
 if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
-if [[ -f '/etc/hysteria/config.json' ]] || [[ -f '/etc/caddy/Caddyfile' ]]; then
-green "经检测，已安装"
-echo $ym > /root/ygkkkca/ca.log
-fi
 sed -i '/--cron/d' /etc/crontab
 echo "0 0 * * * root bash /root/.acme.sh/acme.sh --cron -f >/dev/null 2>&1" >> /etc/crontab
-green "root目录下的域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root/ygkkkca文件夹" 
+green "root目录下的域名证书申请成功或已存在！域名证书（cert.crt）和密钥（private.key）已保存到 /root/ygkkkca文件夹内" 
 yellow "公钥文件crt路径如下，可直接复制"
 green "/root/ygkkkca/cert.crt"
 yellow "密钥文件key路径如下，可直接复制"
 green "/root/ygkkkca/private.key"
+if [[ -f '/etc/hysteria/config.json' ]]; then
+blue "hysteria已安装，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
+elif [[ -f '/etc/caddy/Caddyfile' ]]; then
+blue "naiveproxy已安装，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
+elif [[ -f '/usr/bin/x-ui' ]]; then
+blue "x-ui已安装，此证书可在面版上手动填写应用" && echo $ym > /root/ygkkkca/ca.log
+fi
 rm -rf acme.sh
 else
 fail
