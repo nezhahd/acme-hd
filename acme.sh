@@ -110,12 +110,12 @@ yellow "公钥文件crt路径如下，可直接复制"
 green "/root/ygkkkca/cert.crt"
 yellow "密钥文件key路径如下，可直接复制"
 green "/root/ygkkkca/private.key"
-if [[ -f '/etc/hysteria/config.json' ]]; then
-blue "hysteria已安装，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
-elif [[ -f '/etc/caddy/Caddyfile' ]]; then
-blue "naiveproxy已安装，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
+if [[ -f '/usr/local/bin/hysteria' ]]; then
+blue "检测到hysteria，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
+elif [[ -f '/usr/bin/caddy' ]]; then
+blue "检测到naiveproxy，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
 elif [[ -f '/usr/bin/x-ui' ]]; then
-blue "x-ui已安装，此证书可在面版上手动填写应用" && echo $ym > /root/ygkkkca/ca.log
+blue "检测到x-ui，此证书可在面版上手动填写应用" && echo $ym > /root/ygkkkca/ca.log
 fi
 rm -rf acme.sh
 else
