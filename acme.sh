@@ -104,6 +104,7 @@ rm -rf acme.sh && exit
 }
 if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
 if [[ -f '/etc/hysteria/config.json' ]] || [[ -f '/etc/caddy/Caddyfile' ]]; then
+green "经检测，已安装"
 echo $ym > /root/ygkkkca/ca.log
 fi
 sed -i '/--cron/d' /etc/crontab
