@@ -66,14 +66,14 @@ service apache2 stop >/dev/null 2>&1
 systemctl disable apache2 >/dev/null 2>&1
 fi
 green "所有端口已开放"
-sleep 2
-if [[ -n $(lsof -i :80|grep -v "PID") ]]; then
-yellow "检测到80端口被占用，现执行80端口全释放"
-sleep 2
-lsof -i :80|grep -v "PID"|awk '{print "kill -9",$2}'|sh >/dev/null 2>&1
-green "80端口全释放完毕！"
-sleep 2
-fi
+#sleep 2
+#if [[ -n $(lsof -i :80|grep -v "PID") ]]; then
+#yellow "检测到80端口被占用，现执行80端口全释放"
+#sleep 2
+#lsof -i :80|grep -v "PID"|awk '{print "kill -9",$2}'|sh >/dev/null 2>&1
+#green "80端口全释放完毕！"
+#sleep 2
+#fi
 }
 acme3(){
 readp "请输入注册所需的邮箱（回车跳过则自动生成虚拟gmail邮箱）：" Aemail
@@ -132,11 +132,31 @@ readp "请输入解析完成的二级域名:" ym
 green "已输入的二级域名:$ym" && sleep 1
 domainIP=$(curl -s ipget.net/?ip="$ym")
 wro
+
+readp "设置申请证书的端口[1-65535]（回车跳过为2000-65535之间的随机端口）：" acport
+if [[ -z $acport ]]; then
+acport=$(shuf -i 2000-65535 -n 1)
+until [[ -z $(ss -ntlp | awk '{print $4}' | grep -w "$acport") ]]
+do
+[[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$acport") ]] && yellow "\n端口被占用，请重新输入端口" && readp "自定义证书申请端口:" acport
+done
+else
+until [[ -z $(ss -ntlp | awk '{print $4}' | grep -w "$acport") ]]
+do
+[[ -n $(ss -ntlp | awk '{print $4}' | grep -w "$acport") ]] && yellow "\n端口被占用，请重新输入端口" && readp "自定义证书申请端口:" acport
+done
+fi
+green "证书申请端口：${acport}"
+
+
+
+
+
 if [[ $domainIP = $v4 ]]; then
-bash /root/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --insecure
+bash /root/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --insecure --httpport ${acport}
 fi
 if [[ $domainIP = $v6 ]]; then
-bash /root/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --listen-v6 --insecure
+bash /root/.acme.sh/acme.sh  --issue -d ${ym} --standalone -k ec-256 --server letsencrypt --listen-v6 --insecure --httpport ${acport}
 fi
 installCA
 checktls
