@@ -275,6 +275,21 @@ bash /root/.acme.sh/acme.sh --list
 #red "未找到你输入的${ym}域名证书，请自行核实！" && exit
 #fi
 }
+
+
+acmeshow(){
+if [[ -n $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]]; then
+caacme1=`bash /root/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'`
+if [[ -n $caacme ]]; then
+caacme=$caacme1
+else
+caacme='无证书申请记录'
+fi
+else
+caacme='未安装acme'
+fi
+}
+
 acmerenew(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 green "以下显示的域名就是已申请成功的域名证书"
@@ -326,6 +341,10 @@ yellow "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
 yellow " 提示："
 yellow " 一、独立模式仅支持单域名证书申请"
 yellow " 二、DNS API模式不支持freenom免费域名申请，支持单域名与泛域名证书申请，其中泛域名申请前须要在解析平上设置一个名称为 * 字符的解析记录"
+echo
+acmeshow
+blue "当前已申请成功的证书（域名形式）："
+yellow "$caacme"
 echo
 green " 1. acme.sh申请letsencrypt ECC证书（支持独立模式与DNS API模式） "
 green " 2. 查询已申请成功的域名及自动续期时间点 "
