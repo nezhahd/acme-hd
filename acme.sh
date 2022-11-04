@@ -127,9 +127,20 @@ installCA(){
 bash ~/.acme.sh/acme.sh --install-cert -d ${ym} --key-file /root/ygkkkca/private.key --fullchain-file /root/ygkkkca/cert.crt --ecc
 }
 
+checkacmeca(){
+nowca=`bash /root/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'`
+if [[ $nowca == $ym ]]; then
+red "经检测，输入的域名已有证书申请记录，不用重复申请"
+red "证书申请记录如下："
+bash /root/.acme.sh/acme.sh --list
+yellow "如果一定要重新申请，请先执行删除证书选项" && exit
+fi
+}
+
 ACMEstandaloneDNS(){
 readp "请输入解析完成的二级域名:" ym
 green "已输入的二级域名:$ym" && sleep 1
+checkacmeca
 domainIP=$(curl -s ipget.net/?ip="$ym")
 wro
 if [[ $domainIP = $v4 ]]; then
@@ -146,6 +157,7 @@ ACMEDNS(){
 green "提示：泛域名申请前须要在解析平上设置一个名称为 * 字符的解析记录（输入格式：*.一级主域）"
 readp "请输入解析完成的域名:" ym
 green "已输入的域名:$ym" && sleep 1
+checkacmeca
 freenom=`echo $ym | awk -F '.' '{print $NF}'`
 if [[ $freenom =~ tk|ga|gq|ml|cf ]]; then
 red "经检测，你正在使用freenom免费域名解析，不支持当前DNS API模式，脚本退出" && rm -rf acme.sh && exit 
