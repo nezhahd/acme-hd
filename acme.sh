@@ -270,24 +270,25 @@ acmerenew(){
 green "Main_Domainc下显示的域名就是已申请成功的域名证书，Renew下显示对应域名证书的自动续期时间点"
 bash /root/.acme.sh/acme.sh --list
 echo
-ab="1.无脑一键续期所有证书（推荐）\n2.选择指定的域名证书续期\n0.返回上一层\n 请选择："
-readp "$ab" cd
-case "$cd" in 
-1 ) 
+#ab="1.无脑一键续期所有证书（推荐）\n2.选择指定的域名证书续期\n0.返回上一层\n 请选择："
+#readp "$ab" cd
+#case "$cd" in 
+#1 ) 
+green "开始续期证书，Renew下显示对应域名证书的自动续期时间将更新" && sleep 3
 bash /root/.acme.sh/acme.sh --cron -f
 checktls
-;;
-2 ) 
-readp "请输入要续期的域名证书（复制Main_Domain下显示的域名）:" ym
-if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
-bash /root/.acme.sh/acme.sh --renew -d ${ym} --force --ecc
-checktls
-else
-red "未找到你输入的${ym}域名证书，请自行核实！" && exit
-fi
-;;
-0 ) start_menu;;
-esac
+#;;
+#2 ) 
+#readp "请输入要续期的域名证书（复制Main_Domain下显示的域名）:" ym
+#if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
+#bash /root/.acme.sh/acme.sh --renew -d ${ym} --force --ecc
+#checktls
+#else
+#red "未找到你输入的${ym}域名证书，请自行核实！" && exit
+#fi
+#;;
+#0 ) start_menu;;
+#esac
 }
 uninstall(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
