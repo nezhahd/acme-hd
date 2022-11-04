@@ -8,7 +8,7 @@ green(){ echo -e "\033[32m\033[01m$1\033[0m";}
 yellow(){ echo -e "\033[33m\033[01m$1\033[0m";}
 white(){ echo -e "\033[37m\033[01m$1\033[0m";}
 readp(){ read -p "$(yellow "$1")" $2;}
-[[ $EUID -ne 0 ]] && yellow "请以root模式运行脚本" && rm -rf acme.sh && exit
+[[ $EUID -ne 0 ]] && yellow "请以root模式运行脚本" && exit
 if [[ -f /etc/redhat-release ]]; then
 release="Centos"
 elif cat /etc/issue | grep -q -E -i "debian"; then
@@ -24,7 +24,7 @@ release="Ubuntu"
 elif cat /proc/version | grep -q -E -i "centos|red hat|redhat"; then
 release="Centos"
 else 
-red "不支持你当前系统，请选择使用Ubuntu,Debian,Centos系统" && rm -rf acme.sh && exit 
+red "不支持你当前系统，请选择使用Ubuntu,Debian,Centos系统" && exit 
 fi
 
 v4v6(){
@@ -99,8 +99,7 @@ red "遗憾，域名证书申请失败"
 yellow "建议一：更换下二级域名名称再尝试执行脚本（重要）"
 green "例：原二级域名 x.ygkkk.eu.org 或 x.ygkkk.cf ，在cloudflare中重命名其中的x名称，确定并生效"
 echo
-yellow "建议二：更换下当前本地网络IP环境，再尝试执行脚本"
-rm -rf acme.sh && exit
+yellow "建议二：更换下当前本地网络IP环境，再尝试执行脚本" && exit
 }
 if [[ -f /root/ygkkkca/cert.crt && -f /root/ygkkkca/private.key ]] && [[ -s /root/ygkkkca/cert.crt && -s /root/ygkkkca/private.key ]]; then
 sed -i '/--cron/d' /etc/crontab
@@ -117,7 +116,6 @@ blue "检测到naiveproxy，此证书自动应用" && echo $ym > /root/ygkkkca/c
 elif [[ -f '/usr/bin/x-ui' ]]; then
 blue "检测到x-ui，此证书可在面版上手动填写应用" && echo $ym > /root/ygkkkca/ca.log
 fi
-rm -rf acme.sh
 else
 fail
 fi
@@ -160,7 +158,7 @@ green "已输入的域名:$ym" && sleep 1
 checkacmeca
 freenom=`echo $ym | awk -F '.' '{print $NF}'`
 if [[ $freenom =~ tk|ga|gq|ml|cf ]]; then
-red "经检测，你正在使用freenom免费域名解析，不支持当前DNS API模式，脚本退出" && rm -rf acme.sh && exit 
+red "经检测，你正在使用freenom免费域名解析，不支持当前DNS API模式，脚本退出" && exit 
 fi
 domainIP=$(curl -s ipget.net/?ip=$ym)
 if [[ -n $(echo $domainIP | grep nginx) && -n $(echo $ym | grep \*) ]]; then
@@ -219,7 +217,7 @@ wro(){
 v4v6
 if [[ -n $(echo $domainIP | grep nginx) ]]; then
 yellow "当前域名解析到的IP：无"
-red "域名解析无效，请检查域名是否填写正确或稍等几分钟等待解析完成再执行脚本" && rm -rf acme.sh && exit 
+red "域名解析无效，请检查域名是否填写正确或稍等几分钟等待解析完成再执行脚本" && exit 
 elif [[ -n $(echo $domainIP | grep ":") || -n $(echo $domainIP | grep ".") ]]; then
 if [[ $domainIP != $v4 ]] && [[ $domainIP != $v6 ]]; then
 yellow "当前域名解析到的IP：$domainIP"
@@ -227,7 +225,7 @@ red "当前域名解析的IP与当前VPS使用的IP不匹配"
 green "建议如下："
 yellow "1、请确保CDN小黄云关闭状态(仅限DNS)，其他域名解析网站设置同理"
 yellow "2、请检查域名解析网站设置的IP是否正确"
-rm -rf acme.sh && exit 
+exit 
 else
 green "恭喜，域名解析正确，当前域名解析到的IP：$domainIP"
 fi
@@ -264,7 +262,7 @@ green "WARP已恢复开启"
 fi
 }
 Certificate(){
-[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
+[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 green "Main_Domainc下显示的域名就是已申请成功的域名证书，Renew下显示对应域名证书的自动续期时间点"
 bash /root/.acme.sh/acme.sh --list
 #readp "请输入要撤销并删除的域名证书（复制Main_Domain下显示的域名，退出请按Ctrl+c）:" ym
@@ -278,7 +276,7 @@ bash /root/.acme.sh/acme.sh --list
 #fi
 }
 acmerenew(){
-[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
+[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 green "以下显示的域名就是已申请成功的域名证书"
 bash /root/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'
 echo
@@ -303,7 +301,7 @@ checktls
 #esac
 }
 uninstall(){
-[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
+[[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && exit 
 curl https://get.acme.sh | sh
 bash /root/.acme.sh/acme.sh --uninstall
 rm -rf /root/ygkkkca
@@ -340,7 +338,7 @@ case "$NumberInput" in
 2 ) Certificate;;
 3 ) acmerenew;;
 4 ) uninstall;;
-* ) rm -rf acme.sh && exit      
+* ) exit      
 esac
 }   
 start_menu "first" 
