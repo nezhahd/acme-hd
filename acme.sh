@@ -319,7 +319,7 @@ yellow " 二、DNS API模式不支持freenom免费域名申请，支持单域名
 echo
 green " 1. acme.sh申请letsencrypt ECC证书（支持独立模式与DNS API模式） "
 green " 2. 查询已申请成功的域名及自动续期时间点 "
-green " 3. 手动一键续期或指定续期的域名证书 "
+green " 3. 手动一键证书续期 "
 green " 4. 删除证书并卸载一键ACME证书申请脚本 "
 green " 0. 退出 "
 read -p "请输入数字:" NumberInput
