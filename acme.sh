@@ -267,14 +267,14 @@ bash /root/.acme.sh/acme.sh --list
 }
 acmerenew(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
-green "Main_Domainc下显示的域名就是已申请成功的域名证书，Renew下显示对应域名证书的自动续期时间点"
-bash /root/.acme.sh/acme.sh --list
+green "以下显示的域名就是已申请成功的域名证书"
+bash /root/.acme.sh/acme.sh --list | tail -1 | awk '{print $1}'
 echo
 #ab="1.无脑一键续期所有证书（推荐）\n2.选择指定的域名证书续期\n0.返回上一层\n 请选择："
 #readp "$ab" cd
 #case "$cd" in 
 #1 ) 
-green "开始续期证书，Renew下显示对应域名证书的自动续期时间将更新" && sleep 3
+green "开始续期证书…………" && sleep 3
 bash /root/.acme.sh/acme.sh --cron -f
 checktls
 #;;
