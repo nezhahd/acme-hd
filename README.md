@@ -1,6 +1,6 @@
 一键脚本
 ```
-wget -N https://gitlab.com/rwkgyg/acme-script/raw/main/acme.sh && bash acme.sh
+bash <(curl -L -s https://gitlab.com/rwkgyg/acme-script/raw/main/acme.sh)
 ```
 
 
