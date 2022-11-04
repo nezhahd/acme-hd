@@ -255,16 +255,15 @@ Certificate(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
 green "Main_Domainc下显示的域名就是已申请成功的域名证书，Renew下显示对应域名证书的自动续期时间点"
 bash /root/.acme.sh/acme.sh --list
-echo
-readp "请输入要撤销并删除的域名证书（复制Main_Domain下显示的域名，退出请按Ctrl+c）:" ym
-if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
-bash /root/.acme.sh/acme.sh --revoke -d ${ym} --ecc
-bash /root/.acme.sh/acme.sh --remove -d ${ym} --ecc
-rm -rf /root/ygkkkca
-green "撤销并删除${ym}域名证书成功"
-else
-red "未找到你输入的${ym}域名证书，请自行核实！" && exit
-fi
+#readp "请输入要撤销并删除的域名证书（复制Main_Domain下显示的域名，退出请按Ctrl+c）:" ym
+#if [[ -n $(bash /root/.acme.sh/acme.sh --list | grep $ym) ]]; then
+#bash /root/.acme.sh/acme.sh --revoke -d ${ym} --ecc
+#bash /root/.acme.sh/acme.sh --remove -d ${ym} --ecc
+#rm -rf /root/ygkkkca
+#green "撤销并删除${ym}域名证书成功"
+#else
+#red "未找到你输入的${ym}域名证书，请自行核实！" && exit
+#fi
 }
 acmerenew(){
 [[ -z $(/root/.acme.sh/acme.sh -v 2>/dev/null) ]] && yellow "未安装acme.sh证书申请，无法执行" && rm -rf acme.sh && exit 
@@ -318,9 +317,9 @@ yellow " 一、独立模式仅支持单域名证书申请"
 yellow " 二、DNS API模式不支持freenom免费域名申请，支持单域名与泛域名证书申请，其中泛域名申请前须要在解析平上设置一个名称为 * 字符的解析记录"
 echo
 green " 1. acme.sh申请letsencrypt ECC证书（支持独立模式与DNS API模式） "
-green " 2. 查询已申请成功的域名及自动续期时间点；撤销并删除当前已申请的域名证书 "
+green " 2. 查询已申请成功的域名及自动续期时间点 "
 green " 3. 手动一键续期或指定续期的域名证书 "
-green " 4. 卸载一键ACME证书申请脚本 "
+green " 4. 删除证书并卸载一键ACME证书申请脚本 "
 green " 0. 退出 "
 read -p "请输入数字:" NumberInput
 case "$NumberInput" in     
