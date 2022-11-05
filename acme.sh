@@ -111,9 +111,11 @@ yellow "密钥文件key路径如下，可直接复制"
 green "/root/ygkkkca/private.key"
 if [[ -f '/usr/local/bin/hysteria' ]]; then
 blue "检测到hysteria，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
-elif [[ -f '/usr/bin/caddy' ]]; then
+fi
+if [[ -f '/usr/bin/caddy' ]]; then
 blue "检测到naiveproxy，此证书自动应用" && echo $ym > /root/ygkkkca/ca.log
-elif [[ -f '/usr/bin/x-ui' ]]; then
+fi
+if [[ -f '/usr/bin/x-ui' ]]; then
 blue "检测到x-ui，此证书可在面版上手动填写应用" && echo $ym > /root/ygkkkca/ca.log
 fi
 else
