@@ -108,17 +108,20 @@ yellow "公钥文件crt路径如下，可直接复制"
 green "/root/ygkkkca/cert.crt"
 yellow "密钥文件key路径如下，可直接复制"
 green "/root/ygkkkca/private.key"
+
+echo $ym > /root/ygkkkca/ca.log
+
 if [[ -f '/usr/local/bin/hysteria' ]]; then
-blue "检测到hysteria代理协议，此证书将自动应用" && echo $ym > /root/ygkkkca/ca.log
+blue "检测到hysteria代理协议，此证书将自动应用"
 fi
 if [[ -f '/usr/bin/caddy' ]]; then
-blue "检测到naiveproxy代理协议，此证书将自动应用" && echo $ym > /root/ygkkkca/ca.log
+blue "检测到naiveproxy代理协议，此证书将自动应用"
 fi
 if [[ -f '/usr/local/bin/tuic' ]]; then
-blue "检测到tuic代理协议，此证书将自动应用" && echo $ym > /root/ygkkkca/ca.log
+blue "检测到tuic代理协议，此证书将自动应用"
 fi
 if [[ -f '/usr/bin/x-ui' ]]; then
-blue "检测到x-ui（xray代理协议），此证书可在面版上手动填写应用" && echo $ym > /root/ygkkkca/ca.log
+blue "检测到x-ui（xray代理协议），此证书可在面版上手动填写应用"
 fi
 else
 fail
